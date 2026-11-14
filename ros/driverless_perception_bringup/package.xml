@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>driverless_perception_bringup</name>
+  <version>0.1.0</version>
+  <description>Launch files, parameters and the Foxglove layout for the perception stack.</description>
+  <maintainer email="mate.tirpak@gmail.com">Máté Tirpák</maintainer>
+  <license>MIT</license>
+
+  <exec_depend>fsds_ros2_bridge</exec_depend>
+  <exec_depend>foxglove_bridge</exec_depend>
+  <exec_depend>driverless_perception_race</exec_depend>
+  <exec_depend>driverless_perception_ros</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

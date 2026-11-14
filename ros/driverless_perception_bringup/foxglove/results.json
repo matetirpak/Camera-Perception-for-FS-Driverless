@@ -1,0 +1,1507 @@
+{
+  "configById": {
+    "3D!race": {
+      "cameraState": {
+        "distance": 32,
+        "perspective": true,
+        "phi": 50,
+        "thetaOffset": 180,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-position",
+      "followTf": "fsds/FSCar",
+      "scene": {
+        "transforms": {
+          "showLabel": false,
+          "axisScale": 1
+        }
+      },
+      "transforms": {},
+      "topics": {
+        "/ground_truth/cone_markers": {
+          "visible": true
+        },
+        "/perception/mono/markers": {
+          "visible": true
+        },
+        "/perception/stereo/markers": {
+          "visible": true
+        },
+        "/results/stereo/points": {
+          "visible": true
+        },
+        "/fsds/lidar/Lidar": {
+          "visible": true,
+          "pointSize": 3,
+          "colorMode": "colormap",
+          "colorField": "x",
+          "colorMap": "turbo"
+        },
+        "/fsds/cam_mono/camera_info": {
+          "visible": true
+        },
+        "/fsds/cam_left/camera_info": {
+          "visible": false
+        },
+        "/fsds/cam_right/camera_info": {
+          "visible": false
+        }
+      },
+      "layers": {
+        "grid": {
+          "visible": true,
+          "layerId": "foxglove.Grid",
+          "instanceId": "grid",
+          "label": "Grid",
+          "frameId": "fsds/map",
+          "size": 200,
+          "divisions": 100,
+          "lineWidth": 1,
+          "color": "#248eff40",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {}
+    },
+    "Image!mono": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/fsds/cam_mono/image_color/compressed",
+        "calibrationTopic": "/fsds/cam_mono/camera_info",
+        "annotations": {
+          "/results/cam_mono/annotations": {
+            "visible": true
+          }
+        }
+      }
+    },
+    "Image!left": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/fsds/cam_left/image_color/compressed",
+        "calibrationTopic": "/fsds/cam_left/camera_info",
+        "annotations": {
+          "/results/cam_left/annotations": {
+            "visible": true
+          }
+        }
+      }
+    },
+    "Image!right": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/fsds/cam_right/image_color/compressed",
+        "calibrationTopic": "/fsds/cam_right/camera_info",
+        "annotations": {
+          "/results/cam_right/annotations": {
+            "visible": true
+          }
+        }
+      }
+    },
+    "Plot!quality": {
+      "title": "Per image against the ground truth",
+      "paths": [
+        {
+          "value": "/results/mono/frame.recall",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "mono recall"
+        },
+        {
+          "value": "/results/mono/frame.precision",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "mono precision"
+        },
+        {
+          "value": "/results/stereo/frame.recall",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "stereo recall"
+        },
+        {
+          "value": "/results/stereo/frame.precision",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "stereo precision"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": true,
+      "isSynced": true,
+      "xAxisVal": "timestamp",
+      "sidebarDimension": 240
+    },
+    "Plot!error": {
+      "title": "Position error per image",
+      "paths": [
+        {
+          "value": "/results/mono/frame.mean_error_m",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "mono mean [m]"
+        },
+        {
+          "value": "/results/mono/frame.max_error_m",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "mono max [m]"
+        },
+        {
+          "value": "/results/stereo/frame.mean_error_m",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "stereo mean [m]"
+        },
+        {
+          "value": "/results/stereo/frame.max_error_m",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "stereo max [m]"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": true,
+      "isSynced": true,
+      "xAxisVal": "timestamp",
+      "sidebarDimension": 240
+    },
+    "Plot!counts": {
+      "title": "Cones per image",
+      "paths": [
+        {
+          "value": "/results/mono/frame.expected",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "expected (mono, 20 m)"
+        },
+        {
+          "value": "/results/mono/frame.found",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "mono found"
+        },
+        {
+          "value": "/results/stereo/frame.expected",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "expected (stereo, 10 m)"
+        },
+        {
+          "value": "/results/stereo/frame.found",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "stereo found"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": true,
+      "isSynced": true,
+      "xAxisVal": "timestamp",
+      "sidebarDimension": 240
+    },
+    "Table!laps_race": {
+      "topicPath": "/results/summary.race_by_lap",
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false
+    },
+    "Image!left_cones": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/fsds/cam_left/image_color/compressed",
+        "calibrationTopic": "/fsds/cam_left/camera_info",
+        "annotations": {
+          "/results/cam_left/annotations": {
+            "visible": true
+          }
+        }
+      }
+    },
+    "Image!right_cones": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/fsds/cam_right/image_color/compressed",
+        "calibrationTopic": "/fsds/cam_right/camera_info",
+        "annotations": {
+          "/results/cam_right/annotations": {
+            "visible": true
+          }
+        }
+      }
+    },
+    "Image!mono_cones": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/fsds/cam_mono/image_color/compressed",
+        "calibrationTopic": "/fsds/cam_mono/camera_info",
+        "annotations": {
+          "/results/cam_mono/annotations": {
+            "visible": true
+          }
+        }
+      }
+    },
+    "Table!cones_stereo": {
+      "topicPath": "/results/cones.cones",
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false
+    },
+    "Table!cones_mono": {
+      "topicPath": "/results/cam_mono/cones.cones",
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false
+    },
+    "Image!datasets": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/datasets"
+      }
+    },
+    "Image!sim": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/sim_examples"
+      }
+    },
+    "Image!fsoco": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/fsoco_examples"
+      }
+    },
+    "Image!detection": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/detection"
+      }
+    },
+    "Image!detection_pr": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/detection_pr"
+      }
+    },
+    "Image!training": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/training"
+      }
+    },
+    "Table!detection": {
+      "topicPath": "/results/summary.detection",
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false
+    },
+    "Image!keypoint_errors": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/keypoint_errors"
+      }
+    },
+    "Image!keypoint_crops": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/keypoint_crops"
+      }
+    },
+    "Image!mono_errors": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/mono"
+      }
+    },
+    "Image!depth_standing": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/depth_standing"
+      }
+    },
+    "Image!depth_driving": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/depth_driving"
+      }
+    },
+    "Table!mono": {
+      "topicPath": "/results/summary.mono_offline",
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false
+    },
+    "Image!stereo": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/stereo"
+      }
+    },
+    "Image!stereo_stages": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/stereo_stages"
+      }
+    },
+    "Image!matches": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/stereo_matches"
+      }
+    },
+    "Image!pairing": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/pairing"
+      }
+    },
+    "Table!stereo_stages": {
+      "topicPath": "/results/summary.stereo_stages",
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false
+    },
+    "Image!map": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/map"
+      }
+    },
+    "Table!map": {
+      "topicPath": "/results/summary.map",
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false
+    },
+    "Image!race_scores": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/results/figures/race"
+      }
+    },
+    "Table!race_range": {
+      "topicPath": "/results/summary.race_by_range",
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false
+    },
+    "Table!race_laps": {
+      "topicPath": "/results/summary.race_by_lap",
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false
+    },
+    "Tab!results": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Race",
+          "layout": {
+            "direction": "row",
+            "first": "3D!race",
+            "second": {
+              "direction": "column",
+              "first": {
+                "direction": "column",
+                "first": "Image!mono",
+                "second": {
+                  "direction": "row",
+                  "first": "Image!left",
+                  "second": "Image!right",
+                  "splitPercentage": 50
+                },
+                "splitPercentage": 55
+              },
+              "second": {
+                "direction": "column",
+                "first": {
+                  "direction": "row",
+                  "first": "Plot!quality",
+                  "second": "Plot!error",
+                  "splitPercentage": 50
+                },
+                "second": {
+                  "direction": "row",
+                  "first": "Plot!counts",
+                  "second": "Table!laps_race",
+                  "splitPercentage": 50
+                },
+                "splitPercentage": 55
+              },
+              "splitPercentage": 60
+            },
+            "splitPercentage": 45
+          }
+        },
+        {
+          "title": "Per cone",
+          "layout": {
+            "direction": "row",
+            "first": {
+              "direction": "column",
+              "first": "Image!left_cones",
+              "second": "Image!right_cones",
+              "splitPercentage": 50
+            },
+            "second": {
+              "direction": "column",
+              "first": "Table!cones_stereo",
+              "second": {
+                "direction": "column",
+                "first": "Image!mono_cones",
+                "second": "Table!cones_mono",
+                "splitPercentage": 55
+              },
+              "splitPercentage": 40
+            },
+            "splitPercentage": 50
+          }
+        },
+        {
+          "title": "Datasets",
+          "layout": {
+            "direction": "row",
+            "first": "Image!datasets",
+            "second": {
+              "direction": "column",
+              "first": "Image!sim",
+              "second": "Image!fsoco",
+              "splitPercentage": 55
+            },
+            "splitPercentage": 50
+          }
+        },
+        {
+          "title": "Detection",
+          "layout": {
+            "direction": "row",
+            "first": {
+              "direction": "column",
+              "first": "Image!detection",
+              "second": "Image!detection_pr",
+              "splitPercentage": 60
+            },
+            "second": {
+              "direction": "column",
+              "first": "Image!training",
+              "second": "Table!detection",
+              "splitPercentage": 60
+            },
+            "splitPercentage": 55
+          }
+        },
+        {
+          "title": "Keypoints",
+          "layout": {
+            "direction": "row",
+            "first": "Image!keypoint_errors",
+            "second": "Image!keypoint_crops",
+            "splitPercentage": 50
+          }
+        },
+        {
+          "title": "Mono",
+          "layout": {
+            "direction": "row",
+            "first": {
+              "direction": "column",
+              "first": "Image!mono_errors",
+              "second": "Table!mono",
+              "splitPercentage": 62
+            },
+            "second": {
+              "direction": "column",
+              "first": "Image!depth_driving",
+              "second": "Image!depth_standing",
+              "splitPercentage": 50
+            },
+            "splitPercentage": 50
+          }
+        },
+        {
+          "title": "Stereo",
+          "layout": {
+            "direction": "row",
+            "first": {
+              "direction": "column",
+              "first": "Image!stereo",
+              "second": "Image!stereo_stages",
+              "splitPercentage": 50
+            },
+            "second": {
+              "direction": "column",
+              "first": {
+                "direction": "column",
+                "first": "Image!matches",
+                "second": "Image!pairing",
+                "splitPercentage": 45
+              },
+              "second": "Table!stereo_stages",
+              "splitPercentage": 70
+            },
+            "splitPercentage": 50
+          }
+        },
+        {
+          "title": "Map",
+          "layout": {
+            "direction": "column",
+            "first": "Image!map",
+            "second": "Table!map",
+            "splitPercentage": 72
+          }
+        },
+        {
+          "title": "Race scores",
+          "layout": {
+            "direction": "row",
+            "first": "Image!race_scores",
+            "second": {
+              "direction": "column",
+              "first": "Table!race_range",
+              "second": "Table!race_laps",
+              "splitPercentage": 50
+            },
+            "splitPercentage": 60
+          }
+        }
+      ]
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": "Tab!results"
+}

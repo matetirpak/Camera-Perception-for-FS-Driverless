@@ -1,0 +1,282 @@
+{
+  "model": "yolo26n_fsoco",
+  "dataset": "fsoco",
+  "split": "test",
+  "imgsz": 1280,
+  "images": 1231,
+  "threshold": 0.47,
+  "val_f1_at_threshold": 0.8431,
+  "test": {
+    "all": {
+      "precision": 0.9198,
+      "recall": 0.7588,
+      "f1": 0.8316,
+      "detections": 14825,
+      "cones": 17970
+    },
+    "blue": {
+      "precision": 0.9547,
+      "recall": 0.8206,
+      "f1": 0.8826,
+      "detections": 6263,
+      "cones": 7286
+    },
+    "yellow": {
+      "precision": 0.9302,
+      "recall": 0.8552,
+      "f1": 0.8911,
+      "detections": 6090,
+      "cones": 6624
+    },
+    "orange_big": {
+      "precision": 0.7663,
+      "recall": 0.3835,
+      "f1": 0.5112,
+      "detections": 492,
+      "cones": 983
+    },
+    "orange_small": {
+      "precision": 0.8161,
+      "recall": 0.7121,
+      "f1": 0.7605,
+      "detections": 1979,
+      "cones": 2268
+    },
+    "unknown": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "detections": 1,
+      "cones": 809
+    },
+    "colour_accuracy": 0.9734,
+    "confusion": {
+      "rows_are_ground_truth": [
+        "blue",
+        "yellow",
+        "orange_big",
+        "orange_small",
+        "unknown"
+      ],
+      "counts": [
+        [
+          5977,
+          14,
+          0,
+          2,
+          0
+        ],
+        [
+          9,
+          5664,
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          5,
+          370,
+          167,
+          0
+        ],
+        [
+          6,
+          2,
+          51,
+          1604,
+          1
+        ],
+        [
+          10,
+          36,
+          17,
+          46,
+          0
+        ]
+      ]
+    }
+  },
+  "paper": {
+    "all": {
+      "precision": 0.9409,
+      "recall": 0.8067,
+      "f1": 0.8686,
+      "detections": 14712,
+      "cones": 17161
+    },
+    "blue": {
+      "precision": 0.9562,
+      "recall": 0.8206,
+      "f1": 0.8832,
+      "detections": 6253,
+      "cones": 7286
+    },
+    "yellow": {
+      "precision": 0.9361,
+      "recall": 0.8552,
+      "f1": 0.8938,
+      "detections": 6052,
+      "cones": 6624
+    },
+    "orange": {
+      "precision": 0.9136,
+      "recall": 0.6764,
+      "f1": 0.7773,
+      "detections": 2407,
+      "cones": 3251
+    },
+    "colour_accuracy": 0.9968,
+    "confusion": {
+      "rows_are_ground_truth": [
+        "blue",
+        "yellow",
+        "orange"
+      ],
+      "counts": [
+        [
+          5977,
+          14,
+          2
+        ],
+        [
+          9,
+          5664,
+          6
+        ],
+        [
+          6,
+          7,
+          2192
+        ]
+      ]
+    }
+  },
+  "by_height": [
+    {
+      "height_px": [
+        0,
+        8
+      ],
+      "precision": 0.2308,
+      "recall": 0.0649,
+      "f1": 0.1013,
+      "detections": 26,
+      "cones": 786
+    },
+    {
+      "height_px": [
+        8,
+        16
+      ],
+      "precision": 0.8552,
+      "recall": 0.5654,
+      "f1": 0.6807,
+      "detections": 4117,
+      "cones": 5469
+    },
+    {
+      "height_px": [
+        16,
+        32
+      ],
+      "precision": 0.9503,
+      "recall": 0.8877,
+      "f1": 0.9179,
+      "detections": 5856,
+      "cones": 6464
+    },
+    {
+      "height_px": [
+        32,
+        64
+      ],
+      "precision": 0.9652,
+      "recall": 0.9424,
+      "f1": 0.9536,
+      "detections": 2956,
+      "cones": 3193
+    },
+    {
+      "height_px": [
+        64,
+        null
+      ],
+      "precision": 0.9043,
+      "recall": 0.8484,
+      "f1": 0.8754,
+      "detections": 1870,
+      "cones": 2058
+    }
+  ],
+  "by_group": {
+    "amz": {
+      "precision": 0.9526,
+      "recall": 0.8344,
+      "f1": 0.8896,
+      "detections": 11551,
+      "cones": 13187
+    },
+    "frt": {
+      "precision": 0.8042,
+      "recall": 0.5505,
+      "f1": 0.6536,
+      "detections": 3274,
+      "cones": 4783
+    }
+  },
+  "by_tag": {
+    "truncated": {
+      "recall": 0.5795,
+      "cones": 1950
+    },
+    "knocked_over": {
+      "recall": 0.2783,
+      "cones": 1617
+    },
+    "sticker_band_removed": {
+      "recall": 0.9646,
+      "cones": 1470
+    },
+    "no_tag": {
+      "recall": 0.8182,
+      "cones": 13138
+    }
+  },
+  "coco": {
+    "map50": 0.6484,
+    "map50_95": 0.4117,
+    "per_class": {
+      "blue": {
+        "ap50": 0.9341,
+        "ap50_95": 0.6201
+      },
+      "yellow": {
+        "ap50": 0.9373,
+        "ap50_95": 0.6184
+      },
+      "orange_big": {
+        "ap50": 0.4828,
+        "ap50_95": 0.2314
+      },
+      "orange_small": {
+        "ap50": 0.8019,
+        "ap50_95": 0.5581
+      },
+      "unknown": {
+        "ap50": 0.0858,
+        "ap50_95": 0.0306
+      }
+    }
+  },
+  "latency": {
+    "preprocess": 0.5069,
+    "inference": 5.1772,
+    "postprocess": 0.5645,
+    "total": 6.2487,
+    "image_size": [
+      1280,
+      960
+    ]
+  }
+}

@@ -1,0 +1,309 @@
+{
+  "model": "yolo26m_fsoco_fsds",
+  "dataset": "fsds",
+  "split": "test",
+  "imgsz": 1280,
+  "images": 630,
+  "threshold": 0.5,
+  "val_f1_at_threshold": 0.9263,
+  "test": {
+    "all": {
+      "precision": 0.9541,
+      "recall": 0.9367,
+      "f1": 0.9453,
+      "detections": 11769,
+      "cones": 11988
+    },
+    "blue": {
+      "precision": 0.9409,
+      "recall": 0.9225,
+      "f1": 0.9316,
+      "detections": 5481,
+      "cones": 5590
+    },
+    "yellow": {
+      "precision": 0.9651,
+      "recall": 0.9488,
+      "f1": 0.9569,
+      "detections": 6105,
+      "cones": 6210
+    },
+    "orange_big": {
+      "precision": 0.9836,
+      "recall": 0.9574,
+      "f1": 0.9704,
+      "detections": 183,
+      "cones": 188
+    },
+    "orange_small": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "detections": 0,
+      "cones": 0
+    },
+    "unknown": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "detections": 0,
+      "cones": 0
+    },
+    "colour_accuracy": 0.9996,
+    "confusion": {
+      "rows_are_ground_truth": [
+        "blue",
+        "yellow",
+        "orange_big",
+        "orange_small",
+        "unknown"
+      ],
+      "counts": [
+        [
+          5156,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          5892,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          180,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  "paper": {
+    "all": {
+      "precision": 0.9541,
+      "recall": 0.9367,
+      "f1": 0.9453,
+      "detections": 11769,
+      "cones": 11988
+    },
+    "blue": {
+      "precision": 0.9409,
+      "recall": 0.9225,
+      "f1": 0.9316,
+      "detections": 5481,
+      "cones": 5590
+    },
+    "yellow": {
+      "precision": 0.9651,
+      "recall": 0.9488,
+      "f1": 0.9569,
+      "detections": 6105,
+      "cones": 6210
+    },
+    "orange": {
+      "precision": 0.9836,
+      "recall": 0.9574,
+      "f1": 0.9704,
+      "detections": 183,
+      "cones": 188
+    },
+    "colour_accuracy": 0.9996,
+    "confusion": {
+      "rows_are_ground_truth": [
+        "blue",
+        "yellow",
+        "orange"
+      ],
+      "counts": [
+        [
+          5156,
+          4,
+          0
+        ],
+        [
+          0,
+          5892,
+          0
+        ],
+        [
+          0,
+          0,
+          180
+        ]
+      ]
+    }
+  },
+  "by_height": [
+    {
+      "height_px": [
+        0,
+        8
+      ],
+      "precision": 0.8786,
+      "recall": 0.7714,
+      "f1": 0.8215,
+      "detections": 1919,
+      "cones": 3084
+    },
+    {
+      "height_px": [
+        8,
+        16
+      ],
+      "precision": 0.9718,
+      "recall": 0.9867,
+      "f1": 0.9792,
+      "detections": 4390,
+      "cones": 3675
+    },
+    {
+      "height_px": [
+        16,
+        32
+      ],
+      "precision": 0.9829,
+      "recall": 0.9989,
+      "f1": 0.9908,
+      "detections": 2693,
+      "cones": 2721
+    },
+    {
+      "height_px": [
+        32,
+        64
+      ],
+      "precision": 0.9797,
+      "recall": 0.9994,
+      "f1": 0.9895,
+      "detections": 1727,
+      "cones": 1574
+    },
+    {
+      "height_px": [
+        64,
+        null
+      ],
+      "precision": 0.9019,
+      "recall": 0.9989,
+      "f1": 0.948,
+      "detections": 1040,
+      "cones": 934
+    }
+  ],
+  "by_group": {
+    "CompetitionMap3": {
+      "precision": 0.9541,
+      "recall": 0.9367,
+      "f1": 0.9453,
+      "detections": 11769,
+      "cones": 11988
+    }
+  },
+  "by_tag": {
+    "truncated": {
+      "recall": 0.669,
+      "cones": 580
+    },
+    "no_tag": {
+      "recall": 0.9503,
+      "cones": 11408
+    }
+  },
+  "by_distance": [
+    {
+      "distance_m": [
+        0,
+        10
+      ],
+      "recall": 0.9995,
+      "cones": 2150
+    },
+    {
+      "distance_m": [
+        10,
+        20
+      ],
+      "recall": 0.9996,
+      "cones": 2425
+    },
+    {
+      "distance_m": [
+        20,
+        30
+      ],
+      "recall": 0.9957,
+      "cones": 2099
+    },
+    {
+      "distance_m": [
+        30,
+        40
+      ],
+      "recall": 0.9801,
+      "cones": 2107
+    },
+    {
+      "distance_m": [
+        40,
+        60
+      ],
+      "recall": 0.9067,
+      "cones": 2284
+    },
+    {
+      "distance_m": [
+        60,
+        null
+      ],
+      "recall": 0.4659,
+      "cones": 923
+    }
+  ],
+  "coco": {
+    "map50": 0.958,
+    "map50_95": 0.789,
+    "per_class": {
+      "blue": {
+        "ap50": 0.9488,
+        "ap50_95": 0.7523
+      },
+      "yellow": {
+        "ap50": 0.9701,
+        "ap50_95": 0.7883
+      },
+      "orange_big": {
+        "ap50": 0.955,
+        "ap50_95": 0.8262
+      }
+    }
+  },
+  "latency": {
+    "preprocess": 0.486,
+    "inference": 6.4354,
+    "postprocess": 0.5746,
+    "total": 7.496,
+    "image_size": [
+      1280,
+      960
+    ]
+  }
+}

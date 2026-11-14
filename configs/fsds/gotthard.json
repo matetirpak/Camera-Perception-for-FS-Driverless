@@ -1,0 +1,131 @@
+{
+  "SeeDocsAt": "https://FS-Driverless.github.io/Formula-Student-Driverless-Simulator/",
+  "SettingsVersion": 1.2,
+  "ViewMode": "SpringArmChase",
+  "ClockSpeed": 1.0,
+  "SpectatorServerPassword": "password",
+  "PawnPaths": {
+    "DefaultCar": {
+      "PawnBP": "Class'/AirSim/VehicleAdv/Cars/TechnionCar/TechnionCarPawn.TechnionCarPawn_C'"
+    }
+  },
+  "Vehicles": {
+    "FSCar": {
+      "DefaultVehicleState": "",
+      "EnableCollisionPassthrogh": false,
+      "EnableCollisions": true,
+      "AllowAPIAlways": true,
+      "RC": {
+        "RemoteControlID": -1
+      },
+      "Sensors": {
+        "Imu": {
+          "SensorType": 2,
+          "Enabled": true
+        },
+        "Gps": {
+          "SensorType": 3,
+          "Enabled": true
+        },
+        "GSS": {
+          "SensorType": 7,
+          "Enabled": true
+        },
+        "Lidar": {
+          "SensorType": 6,
+          "Enabled": true,
+          "X": 1.2,
+          "Y": 0,
+          "Z": 0.15,
+          "Roll": 0,
+          "Pitch": 0,
+          "Yaw": 0,
+          "NumberOfLasers": 32,
+          "PointsPerScan": 32768,
+          "VerticalFOVUpper": 5,
+          "VerticalFOVLower": -10,
+          "HorizontalFOVStart": -90,
+          "HorizontalFOVEnd": 90,
+          "RotationsPerSecond": 10,
+          "Range": 40,
+          "DrawDebugPoints": false
+        }
+      },
+      "Cameras": {
+        "cam_left": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 1280,
+              "Height": 960,
+              "FOV_Degrees": 64.5
+            },
+            {
+              "ImageType": 2,
+              "Width": 1280,
+              "Height": 960,
+              "FOV_Degrees": 64.5
+            }
+          ],
+          "X": -0.3,
+          "Y": 0.16,
+          "Z": 1.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        },
+        "cam_mono": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 1280,
+              "Height": 960,
+              "FOV_Degrees": 54.5
+            },
+            {
+              "ImageType": 2,
+              "Width": 1280,
+              "Height": 960,
+              "FOV_Degrees": 54.5
+            }
+          ],
+          "X": -0.3,
+          "Y": 0.0,
+          "Z": 1.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        },
+        "cam_right": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 1280,
+              "Height": 960,
+              "FOV_Degrees": 64.5
+            },
+            {
+              "ImageType": 2,
+              "Width": 1280,
+              "Height": 960,
+              "FOV_Degrees": 64.5
+            }
+          ],
+          "X": -0.3,
+          "Y": -0.16,
+          "Z": 1.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "X": 2,
+      "Y": 0,
+      "Z": 0,
+      "Pitch": 0,
+      "Roll": 0,
+      "Yaw": 0
+    }
+  },
+  "SubWindows": []
+}

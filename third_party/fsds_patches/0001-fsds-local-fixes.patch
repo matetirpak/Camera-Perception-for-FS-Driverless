@@ -1,0 +1,807 @@
+diff --git a/python/examples/autonomous_example.py b/python/examples/autonomous_example.py
+index 04527ef..cf623bf 100644
+--- a/python/examples/autonomous_example.py
++++ b/python/examples/autonomous_example.py
+@@ -1,6 +1,10 @@
+ """
+-This is a tiny autonomous system that should be able to finish a lap in an empty map with only cones. 
+-Use the following settings.json:
++This is a tiny autonomous system that should be able to finish a lap in an empty map with only cones.
++It works with the default settings.json (it uses the low front lidar 'Lidar2').
++Ground points are removed using the lidar mounting height from the settings, so
++multi-laser lidars that also hit the ground work as well.
++It was originally written for a single flat laser, like in this settings.json
++(set lidar_name = 'Lidar' below to use it):
+ 
+ {
+   "SettingsVersion": 1.2,
+@@ -44,6 +48,7 @@ Use the following settings.json:
+ import sys
+ import os
+ import time
++import json
+ 
+ import numpy
+ import math
+@@ -67,6 +72,11 @@ max_throttle = 0.2 # m/s^2
+ target_speed = 4 # m/s
+ max_steering = 0.3
+ cones_range_cutoff = 7 # meters
++lidar_name = 'Lidar2'
++
++# Height of the lidar above the ground, used to remove ground points
++lidar_height = json.loads(client.getSettingsString())['Vehicles']['FSCar']['Sensors'][lidar_name]['Z']
++ground_margin = 0.05 # meters
+ 
+ def pointgroup_to_cone(group):
+     average_x = 0
+@@ -83,7 +93,7 @@ def distance(x1, y1, x2, y2):
+ 
+ def find_cones():
+     # Get the pointcloud
+-    lidardata = client.getLidarData(lidar_name = 'Lidar')
++    lidardata = client.getLidarData(lidar_name = lidar_name)
+ 
+     # no points
+     if len(lidardata.point_cloud) < 3:
+@@ -93,26 +103,32 @@ def find_cones():
+     points = numpy.array(lidardata.point_cloud, dtype=numpy.dtype('f4'))
+     points = numpy.reshape(points, (int(points.shape[0]/3), 3))
+ 
++    # Remove the ground: the track is flat, so ground points are at -lidar_height in the lidar frame
++    points = points[points[:, 2] > -lidar_height + ground_margin]
++    if len(points) == 0:
++        return []
++
++    # Sort by horizontal angle so points of the same cone, possibly hit by multiple lasers, are next to each other
++    points = points[numpy.argsort(numpy.arctan2(points[:, 1], points[:, 0]))]
++
+     # Go through all the points and find nearby groups of points that are close together as those will probably be cones.
+ 
+-    current_group = []
++    current_group = [{'x': points[0][0], 'y': points[0][1]}]
+     cones = []
+-    for i in range(1, len(points)):
+-
+-        # Get the distance from current to previous point
+-        distance_to_last_point = distance(points[i][0], points[i][1], points[i-1][0], points[i-1][1])
++    for i in range(1, len(points) + 1):
+ 
+-        if distance_to_last_point < 0.1:
+-            # Points closer together then 10 cm are part of the same group
++        # Points closer together then 20 cm are part of the same group
++        if i < len(points) and distance(points[i][0], points[i][1], points[i-1][0], points[i-1][1]) < 0.2:
+             current_group.append({'x': points[i][0], 'y': points[i][1]})
+-        else:
+-            # points further away indiate a split between groups
+-            if len(current_group) > 0:
+-                cone = pointgroup_to_cone(current_group)
+-                # calculate distance between lidar and cone
+-                if distance(0, 0, cone['x'], cone['y']) < cones_range_cutoff:
+-                    cones.append(cone)
+-                current_group = []
++            continue
++
++        # points further away (or the end of the scan) indicate a split between groups
++        cone = pointgroup_to_cone(current_group)
++        # calculate distance between lidar and cone
++        if distance(0, 0, cone['x'], cone['y']) < cones_range_cutoff:
++            cones.append(cone)
++        if i < len(points):
++            current_group = [{'x': points[i][0], 'y': points[i][1]}]
+     return cones
+ 
+ def calculate_steering(cones):
+diff --git a/python/examples/camera_color_png.py b/python/examples/camera_color_png.py
+index 88b398c..fa72973 100644
+--- a/python/examples/camera_color_png.py
++++ b/python/examples/camera_color_png.py
+@@ -1,7 +1,7 @@
+ """
+ This example shows how to retrieve an color image and store it as a png file
+-Before running this you must add the camera to your vehicle.
+-Add the following to your settings.json file in the Cameras section:
++It uses 'cam1' from the default settings.json. To use a different camera,
++add it to the Cameras section of your settings.json and change camera_name below, e.g.:
+ 
+ "examplecam": {
+     "CaptureSettings": [
+@@ -38,7 +38,7 @@ client = fsds.FSDSClient()
+ client.confirmConnection()
+ 
+ # Get the image
+-[image] = client.simGetImages([fsds.ImageRequest(camera_name = 'examplecam', image_type = fsds.ImageType.Scene, pixels_as_float = False, compress = True)], vehicle_name = 'FSCar')
++[image] = client.simGetImages([fsds.ImageRequest(camera_name = 'cam1', image_type = fsds.ImageType.Scene, pixels_as_float = False, compress = True)], vehicle_name = 'FSCar')
+ 
+ print("Image width: ", image.width)
+ print("Image height: ", image.height)
+diff --git a/python/examples/gss.py b/python/examples/gss.py
+index d097783..19eaebb 100644
+--- a/python/examples/gss.py
++++ b/python/examples/gss.py
+@@ -32,9 +32,12 @@ while True:
+     # nanosecond timestamp of when the gss data was captured
+     print("timestamp nano: ", gss.time_stamp)
+ 
+-    # velocity in m/s of the car in world reference frame
++    # velocity in m/s of the car in the car's (body) reference frame
+     print("linear_velocity: ", gss.linear_velocity)
+ 
++    # angular velocity in rad/s
++    print("angular_velocity: ", gss.angular_velocity)
++
+     print()
+ 
+     time.sleep(1)
+diff --git a/python/examples/lidar.py b/python/examples/lidar.py
+index c6f735e..c7ecb8e 100644
+--- a/python/examples/lidar.py
++++ b/python/examples/lidar.py
+@@ -35,7 +35,7 @@ client = fsds.FSDSClient()
+ # Check network connection
+ client.confirmConnection()
+ 
+-lidardata = client.getLidarData(lidar_name = 'ExampleLidar')
++lidardata = client.getLidarData(lidar_name = 'Lidar1') # ExampleLidar
+ 
+ # nanosecond timestamp of when the imu frame was captured
+ print("lidardata nano: ", lidardata.time_stamp)
+diff --git a/python/fsds/client.py b/python/fsds/client.py
+index d01e487..3d7559c 100644
+--- a/python/fsds/client.py
++++ b/python/fsds/client.py
+@@ -173,6 +173,15 @@ class FSDSClient:
+         """
+         return GroundSpeedSensorData.from_msgpack(self.client.call('getGroundSpeedSensorData', vehicle_name))
+ 
++    def simGetWheelStates(self, vehicle_name = 'FSCar'):
++        """
++        Args:
++            vehicle_name (str, optional): Name of vehicle to which the sensor corresponds to. Default FSCar.
++        Returns:
++            WheelStates: rpm, rotation angle and steering angle of each wheel
++        """
++        return WheelStates.from_msgpack(self.client.call('simGetWheelStates', vehicle_name))
++
+     def setCarControls(self, controls, vehicle_name = 'FSCar'):
+         """
+         Control the car using throttle, steering, brake, etc.
+diff --git a/python/fsds/types.py b/python/fsds/types.py
+index 43f68c1..d6294dd 100644
+--- a/python/fsds/types.py
++++ b/python/fsds/types.py
+@@ -321,6 +321,22 @@ class GpsData(MsgpackMixin):
+     time_stamp = np.uint64(0)
+     gnss = GnssReport()
+ 
++class WheelStates(MsgpackMixin):
++    time_stamp = np.uint64(0)
++    fl_rpm = 0.0
++    fr_rpm = 0.0
++    rl_rpm = 0.0
++    rr_rpm = 0.0
++    fl_rotation_angle = 0.0
++    fr_rotation_angle = 0.0
++    rl_rotation_angle = 0.0
++    rr_rotation_angle = 0.0
++    fl_steering_angle = 0.0
++    fr_steering_angle = 0.0
++    rl_steering_angle = 0.0
++    rr_steering_angle = 0.0
++
+ class GroundSpeedSensorData(MsgpackMixin):
+     time_stamp = np.uint64(0)
+-    linear_velocity = Vector3r()
+\ No newline at end of file
++    linear_velocity = Vector3r()
++    angular_velocity = Vector3r()
+\ No newline at end of file
+diff --git a/ros2/src/fsds_ros2_bridge/launch/fsds_ros2_bridge.launch.py b/ros2/src/fsds_ros2_bridge/launch/fsds_ros2_bridge.launch.py
+index 72d7367..e559398 100644
+--- a/ros2/src/fsds_ros2_bridge/launch/fsds_ros2_bridge.launch.py
++++ b/ros2/src/fsds_ros2_bridge/launch/fsds_ros2_bridge.launch.py
+@@ -14,20 +14,43 @@ def generate_launch_description():
+     if(not camera_configs):
+         print('no cameras configured in ~/Formula-Student-Driverless-Simulator/settings.json')
+ 
++    # All scene cameras are served by one node: it asks for them in the same round, so their images come from
++    # the same render and stereo gets a pair every frame. Depth cameras keep a node of their own.
++    scene = {n: c for n, c in camera_configs.items() if c["CaptureSettings"][0]["ImageType"] != 2}
++    depth = {n: c for n, c in camera_configs.items() if c["CaptureSettings"][0]["ImageType"] == 2}
++
+     camera_nodes = [
+         launch_ros.actions.Node(
+             package='fsds_ros2_bridge',
+             executable='fsds_ros2_bridge_camera',
+-            namespace="fsds/camera", 
++            namespace="fsds/camera",
++            name="scene_cameras",
++            output='screen',
++            parameters=[
++                {'camera_names': list(scene.keys())},
++                {'fov_degrees_list': [float(c["CaptureSettings"][0].get("FOV_Degrees", 90)) for c in scene.values()]},
++                {'depthcamera': False},
++                {'framerate': CAMERA_FRAMERATE},
++                {'host_ip': launch.substitutions.LaunchConfiguration('host')},
++            ]
++        )
++    ] if scene else []
++
++    camera_nodes += [
++        launch_ros.actions.Node(
++            package='fsds_ros2_bridge',
++            executable='fsds_ros2_bridge_camera',
++            namespace="fsds/camera",
+             name=camera_name,
+             output='screen',
+             parameters=[
+                 {'camera_name': camera_name},
+-                {'depthcamera': camera_config["CaptureSettings"][0]["ImageType"] == 2},
++                {'depthcamera': True},
++                {'fov_degrees': float(camera_config["CaptureSettings"][0].get("FOV_Degrees", 90))},
+                 {'framerate': CAMERA_FRAMERATE},
+                 {'host_ip': launch.substitutions.LaunchConfiguration('host')},
+             ]
+-        ) for camera_name, camera_config in camera_configs.items()]
++        ) for camera_name, camera_config in depth.items()]
+ 
+     ld = launch.LaunchDescription([
+ 
+diff --git a/ros2/src/fsds_ros2_bridge/src/airsim_ros_wrapper.cpp b/ros2/src/fsds_ros2_bridge/src/airsim_ros_wrapper.cpp
+index 16bd04f..4d9ff90 100644
+--- a/ros2/src/fsds_ros2_bridge/src/airsim_ros_wrapper.cpp
++++ b/ros2/src/fsds_ros2_bridge/src/airsim_ros_wrapper.cpp
+@@ -366,7 +366,8 @@ nav_msgs::msg::Odometry AirsimROSWrapper::get_odom_msg_from_airsim_state(const m
+     double yaw = atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
+ 
+     double linear_forward = car_state.kinematics_estimated.twist.linear.x() * cos(yaw) + car_state.kinematics_estimated.twist.linear.y() * sin(yaw);
+-    double linear_sideways = car_state.kinematics_estimated.twist.linear.x() * sin(yaw) + car_state.kinematics_estimated.twist.linear.y() * -cos(yaw);
++    // Body-frame lateral velocity, positive to the left (ENU / REP-103), same sign as /fsds/gss.
++    double linear_sideways = -car_state.kinematics_estimated.twist.linear.x() * sin(yaw) + car_state.kinematics_estimated.twist.linear.y() * cos(yaw);
+ 
+     odom_enu_msg.twist.twist.linear.x = linear_forward;
+     odom_enu_msg.twist.twist.linear.y = linear_sideways;
+@@ -930,9 +931,17 @@ void AirsimROSWrapper::go_signal_timer_cb()
+ 
+ void AirsimROSWrapper::finished_signal_cb(const fs_msgs::msg::FinishedSignal& msg)
+ {
+-    // Get access token
+-    std::string operator_token(std::getenv("OPERATOR_TOKEN"));
+-    std::string operator_url(std::getenv("OPERATOR_URL"));
++    // Get access token. Without the competition operator these are unset, and
++    // constructing a std::string from a null pointer would crash the bridge.
++    const char* operator_token_env = std::getenv("OPERATOR_TOKEN");
++    const char* operator_url_env = std::getenv("OPERATOR_URL");
++    if (operator_token_env == nullptr || operator_url_env == nullptr)
++    {
++        RCLCPP_INFO(nh_->get_logger(), "Finished signal received; OPERATOR_TOKEN/OPERATOR_URL not set, not notifying an operator.");
++        return;
++    }
++    std::string operator_token(operator_token_env);
++    std::string operator_url(operator_url_env);
+     operator_url = operator_url + "/finished";
+ 
+     RCLCPP_DEBUG_STREAM(nh_->get_logger(), "Operator token: " <<  operator_token << " operator url: " << operator_url);
+diff --git a/ros2/src/fsds_ros2_bridge/src/fsds_ros2_bridge_camera.cpp b/ros2/src/fsds_ros2_bridge/src/fsds_ros2_bridge_camera.cpp
+index 3831965..7808043 100644
+--- a/ros2/src/fsds_ros2_bridge/src/fsds_ros2_bridge_camera.cpp
++++ b/ros2/src/fsds_ros2_bridge/src/fsds_ros2_bridge_camera.cpp
+@@ -13,6 +13,12 @@
+ #include <cv_bridge/cv_bridge.h>
+ #endif
+ #include <math.h>
++#include <condition_variable>
++#include <memory>
++#include <mutex>
++#include <atomic>
++#include <thread>
++#include <vector>
+ 
+ using dseconds = std::chrono::duration<double>;
+ 
+@@ -23,16 +29,65 @@ typedef msr::airlib::ImageCaptureBase::ImageType ImageType;
+ // number of seconds to record frames before printing fps
+ const int FPS_WINDOW = 3;
+ 
+-msr::airlib::CarRpcLibClient *airsim_api;
+-rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_pub;
+-rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr info_pub;
+ ros_bridge::Statistics fps_statistic;
+ 
++// One camera of this node. Every camera has its own connection to the simulator, because a request blocks until
++// its image is rendered: asking for the cameras one after the other puts them in different renders (measured:
++// 6.5 images per second per camera and no pair from the same render), asking for all of them at once puts them in
++// the same render (18 per second, 99% of the pairs).
++struct CameraStream
++{
++    std::string name;
++    std::string frame_id;
++    double fov_degrees = 90.0;
++    bool depthcamera = false;
++    std::unique_ptr<msr::airlib::CarRpcLibClient> client;
++    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_pub;
++    rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr info_pub;
++};
++
++// Lets every camera thread start its request in the same round.
++class RoundBarrier
++{
++public:
++    explicit RoundBarrier(unsigned count) : count_(count), waiting_(0), round_(0) {}
++
++    void wait()
++    {
++        std::unique_lock<std::mutex> lock(mutex_);
++        const unsigned round = round_;
++        if (++waiting_ == count_) {
++            waiting_ = 0;
++            ++round_;
++            condition_.notify_all();
++        } else {
++            condition_.wait(lock, [this, round] { return round_ != round || stopped_; });
++        }
++    }
++
++    void stop()
++    {
++        std::unique_lock<std::mutex> lock(mutex_);
++        stopped_ = true;
++        condition_.notify_all();
++    }
++
++private:
++    std::mutex mutex_;
++    std::condition_variable condition_;
++    unsigned count_;
++    unsigned waiting_;
++    unsigned round_;
++    bool stopped_ = false;
++};
++
+ // settings
+ std::string camera_name = "";
+ std::string camera_frame_prefix = "";
+ std::string camera_frame_id = "";
++std::string camera_tf_frame_id = "";
+ double framerate = 0.0;
++double fov_degrees = 90.0;
+ std::string host_ip = "localhost";
+ bool depthcamera = false;
+ 
+@@ -43,7 +98,7 @@ rclcpp::Time make_ts(uint64_t unreal_ts)
+     return rclcpp::Time(unreal_ts);
+ }
+ 
+-std::vector<ImageResponse> getImage(ImageRequest req) {
++std::vector<ImageResponse> getImage(CameraStream &stream, ImageRequest req) {
+      // We are using simGetImages instead of simGetImage because the latter does not return image dimention information.
+     std::vector<ImageRequest> reqs;
+     reqs.push_back(req);
+@@ -51,7 +106,7 @@ std::vector<ImageResponse> getImage(ImageRequest req) {
+     std::vector<ImageResponse> img_responses;
+     try
+     {
+-        img_responses = airsim_api->simGetImages(reqs, "FSCar");
++        img_responses = stream.client->simGetImages(reqs, "FSCar");
+     }
+     catch (rpc::rpc_error &e)
+     {
+@@ -63,9 +118,9 @@ std::vector<ImageResponse> getImage(ImageRequest req) {
+     return img_responses;
+ }
+ 
+-void doImageUpdate()
++void doImageUpdate(CameraStream &stream)
+ {
+-    auto img_responses = getImage(ImageRequest(camera_name, ImageType::Scene, false, false));
++    auto img_responses = getImage(stream, ImageRequest(stream.name, ImageType::Scene, false, false));
+ 
+     // if a render request failed for whatever reason, this img will be empty.
+     if (img_responses.size() == 0 || img_responses[0].time_stamp == 0)
+@@ -82,22 +137,23 @@ void doImageUpdate()
+     img_msg->encoding = "bgr8";
+     img_msg->is_bigendian = 0;
+     img_msg->header.stamp = make_ts(img_response.time_stamp);
+-    img_msg->header.frame_id = camera_frame_id;
++    img_msg->header.frame_id = stream.frame_id;
+ 
+-    image_pub->publish(*img_msg);
++    stream.image_pub->publish(*img_msg);
+ 
+     sensor_msgs::msg::CameraInfo::SharedPtr info_msg = std::make_shared<sensor_msgs::msg::CameraInfo>();
+     info_msg->header.stamp = make_ts(img_response.time_stamp);
+-    info_msg->header.frame_id = camera_frame_id;
++    info_msg->header.frame_id = stream.frame_id;
+     info_msg->width = img_response.width;
+     info_msg->height = img_response.height;
+     info_msg->distortion_model = "plumb_bob";
+     info_msg->d = {0, 0, 0, 0, 0};
+ 
+-    double fx = static_cast<double>(img_response.width) / 2;
+-    double fy = fx;
+-    double cx = fx;
++    // Pinhole with square pixels: FOV_Degrees in settings.json is the horizontal field of view.
++    double cx = static_cast<double>(img_response.width) / 2;
+     double cy = static_cast<double>(img_response.height) / 2;
++    double fx = cx / std::tan(stream.fov_degrees * M_PI / 360.0);
++    double fy = fx;
+ 
+     info_msg->k = {fx, 0, cx,
+                    0, fy, cy,
+@@ -111,7 +167,7 @@ void doImageUpdate()
+                    0, fy, cy, 0,
+                    0, 0, 1.0, 0};
+ 
+-    info_pub->publish(*info_msg);
++    stream.info_pub->publish(*info_msg);
+ 
+     fps_statistic.addCount();
+ }
+@@ -154,9 +210,9 @@ cv::Mat noisify_depthimage(cv::Mat in)
+     return out;
+ }
+ 
+-void doDepthImageUpdate()
++void doDepthImageUpdate(CameraStream &stream)
+ {
+-    auto img_responses = getImage(ImageRequest(camera_name, ImageType::DepthPerspective, true, false));
++    auto img_responses = getImage(stream, ImageRequest(stream.name, ImageType::DepthPerspective, true, false));
+ 
+     // if a render request failed for whatever reason, this img will be empty.
+     if (img_responses.size() == 0 || img_responses[0].time_stamp == 0)
+@@ -167,9 +223,9 @@ void doDepthImageUpdate()
+     cv::Mat depth_img = noisify_depthimage(manual_decode_depth(img_response));
+     sensor_msgs::msg::Image::SharedPtr img_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "32FC1", depth_img).toImageMsg();
+     img_msg->header.stamp = make_ts(img_response.time_stamp);
+-    img_msg->header.frame_id = camera_frame_id;
++    img_msg->header.frame_id = stream.frame_id;
+ 
+-    image_pub->publish(*img_msg);
++    stream.image_pub->publish(*img_msg);
+     fps_statistic.addCount();
+ }
+ 
+@@ -178,20 +234,24 @@ int main(int argc, char ** argv)
+     rclcpp::init(argc, argv);
+     std::shared_ptr<rclcpp::Node> nh = rclcpp::Node::make_shared("fsds_ros2_bridge_camera");
+ 
+-    // load settings
+-    camera_name = nh->declare_parameter<std::string>("camera_name", "");
++    // One node serves several cameras: camera_names with a field of view each, or the old camera_name for one.
++    std::vector<std::string> camera_names = nh->declare_parameter<std::vector<std::string>>("camera_names", std::vector<std::string>{});
++    std::string single_camera = nh->declare_parameter<std::string>("camera_name", "");
++    if (camera_names.empty() && !single_camera.empty())
++        camera_names.push_back(single_camera);
++    std::vector<double> fov_list = nh->declare_parameter<std::vector<double>>("fov_degrees_list", std::vector<double>{});
++    double fov_single = nh->declare_parameter<double>("fov_degrees", 90.0);
+     camera_frame_prefix = nh->declare_parameter<std::string>("camera_frame_prefix", "/fsds/");
+-    camera_frame_id = camera_frame_prefix + camera_name;
+-
+     framerate = nh->declare_parameter<double>("framerate", 0.0);
+     host_ip = nh->declare_parameter<std::string>("host_ip", "localhost");
+     depthcamera = nh->declare_parameter<bool>("depthcamera", false);
++    double timeout_sec = nh->declare_parameter<double>("timeout", 10.0);
+ 
+-    if(camera_name == "") {
+-        RCLCPP_FATAL(nh->get_logger(), "camera_name unset.");
++    if (camera_names.empty()) {
++        RCLCPP_FATAL(nh->get_logger(), "camera_names unset.");
+         return 1;
+     }
+-    if(framerate == 0) {
++    if (framerate == 0) {
+         RCLCPP_FATAL(nh->get_logger(), "framerate unset.");
+         return 1;
+     }
+@@ -199,32 +259,61 @@ int main(int argc, char ** argv)
+     // initialize fps counter
+     fps_statistic = ros_bridge::Statistics("fps");
+ 
+-    // ready airsim connection
+-    msr::airlib::CarRpcLibClient client(host_ip, RpcLibPort, 5);
+-    airsim_api = &client;
+-
+-    double timeout_sec = nh->declare_parameter<double>("timeout", 10.0);
+-
+-    try {
+-        std::cout << "Waiting for connection - " << std::endl;
+-        airsim_api->confirmConnection(timeout_sec);
+-        std::cout << "Connected to the simulator!" << std::endl;
+-    } catch (const std::exception &e) {
+-        std::string msg = e.what();
+-        RCLCPP_ERROR(nh->get_logger(), "Exception raised by the API, something went wrong: %s\n", msg.c_str());
+-        return 1;
++    std::vector<std::unique_ptr<CameraStream>> streams;
++    for (size_t i = 0; i < camera_names.size(); ++i) {
++        auto stream = std::make_unique<CameraStream>();
++        stream->name = camera_names[i];
++        // The topic stays absolute (/fsds/<camera>/...), but tf2 frame ids may not start with '/'
++        // and must match the static tf child frame fsds/<camera> published by the bridge.
++        std::string topic_prefix = camera_frame_prefix + stream->name;
++        stream->frame_id = topic_prefix.substr(topic_prefix.find_first_not_of('/'));
++        stream->fov_degrees = i < fov_list.size() ? fov_list[i] : fov_single;
++        stream->depthcamera = depthcamera;
++        stream->client = std::make_unique<msr::airlib::CarRpcLibClient>(host_ip, RpcLibPort, 5);
++        try {
++            std::cout << "Waiting for connection - " << stream->name << std::endl;
++            stream->client->confirmConnection(timeout_sec);
++        } catch (const std::exception &e) {
++            std::string msg = e.what();
++            RCLCPP_ERROR(nh->get_logger(), "Exception raised by the API, something went wrong: %s\n", msg.c_str());
++            return 1;
++        }
++        stream->image_pub = nh->create_publisher<sensor_msgs::msg::Image>(topic_prefix + "/image_color", 1);
++        stream->info_pub = nh->create_publisher<sensor_msgs::msg::CameraInfo>(topic_prefix + "/camera_info", 1);
++        streams.push_back(std::move(stream));
++    }
++    std::cout << "Connected to the simulator!" << std::endl;
++
++    // Every camera has a thread of its own and they start each round together, so their images come from the same
++    // render. Sleeping to the frame period after the request keeps the rate at framerate at most.
++    RoundBarrier barrier(static_cast<unsigned>(streams.size()));
++    std::atomic<bool> running(true);
++    std::vector<std::thread> threads;
++    for (size_t i = 0; i < streams.size(); ++i) {
++        threads.emplace_back([&, i]() {
++            while (running.load() && rclcpp::ok()) {
++                barrier.wait();
++                if (!running.load() || !rclcpp::ok())
++                    break;
++                auto started = std::chrono::steady_clock::now();
++                if (streams[i]->depthcamera)
++                    doDepthImageUpdate(*streams[i]);
++                else
++                    doImageUpdate(*streams[i]);
++                std::this_thread::sleep_until(started + std::chrono::duration_cast<std::chrono::steady_clock::duration>(dseconds{1 / framerate}));
++            }
++        });
+     }
+ 
+-    // ready topic
+-    image_pub = nh->create_publisher<sensor_msgs::msg::Image>(camera_frame_id + "/image_color", 1);
+-    info_pub = nh->create_publisher<sensor_msgs::msg::CameraInfo>(camera_frame_id + "/camera_info", 1);
+-
+-    // start the loop
+-    rclcpp::TimerBase::SharedPtr imageTimer = nh->create_wall_timer(dseconds { 1/framerate }, depthcamera ? &doDepthImageUpdate : &doImageUpdate);
+     rclcpp::TimerBase::SharedPtr fpsTimer = nh->create_wall_timer(dseconds { FPS_WINDOW }, [&nh](){
+         RCLCPP_DEBUG(nh->get_logger(), "Average FPS: %d\n", fps_statistic.getCount()/FPS_WINDOW);
+         fps_statistic.Reset();
+     });
+     rclcpp::spin(nh);
++
++    running.store(false);
++    barrier.stop();
++    for (auto &thread : threads)
++        thread.join();
+     return 0;
+ }
+diff --git a/settings.json b/settings.json
+index 6e43641..a25a197 100644
+--- a/settings.json
++++ b/settings.json
+@@ -1,101 +1,131 @@
+ {
+-    "SeeDocsAt": "https://FS-Driverless.github.io/Formula-Student-Driverless-Simulator/",
+-    "SettingsVersion": 1.2,
+-    "ViewMode": "SpringArmChase",
+-    "ClockSpeed": 1.0,
+-    "SpectatorServerPassword": "password",
+-    "PawnPaths": {
+-      "DefaultCar": { "PawnBP": "Class'/AirSim/VehicleAdv/Cars/TechnionCar/TechnionCarPawn.TechnionCarPawn_C'" }
+-    },
+-    "Vehicles": {
+-      "FSCar": {
+-        "DefaultVehicleState": "",
+-        "EnableCollisionPassthrogh": false,
+-        "EnableCollisions": true,
+-        "AllowAPIAlways": true,
+-        "RC":{
+-            "RemoteControlID": -1
++  "SeeDocsAt": "https://FS-Driverless.github.io/Formula-Student-Driverless-Simulator/",
++  "SettingsVersion": 1.2,
++  "ViewMode": "SpringArmChase",
++  "ClockSpeed": 1.0,
++  "SpectatorServerPassword": "password",
++  "PawnPaths": {
++    "DefaultCar": {
++      "PawnBP": "Class'/AirSim/VehicleAdv/Cars/TechnionCar/TechnionCarPawn.TechnionCarPawn_C'"
++    }
++  },
++  "Vehicles": {
++    "FSCar": {
++      "DefaultVehicleState": "",
++      "EnableCollisionPassthrogh": false,
++      "EnableCollisions": true,
++      "AllowAPIAlways": true,
++      "RC": {
++        "RemoteControlID": -1
++      },
++      "Sensors": {
++        "Imu": {
++          "SensorType": 2,
++          "Enabled": true
+         },
+-        "Sensors": {
+-          "Imu" : {
+-            "SensorType": 2,
+-            "Enabled": true
+-          },
+-          "Gps" : {
+-            "SensorType": 3,
+-            "Enabled": true
+-          },
+-          "Lidar1": {
+-            "SensorType": 6,
+-            "Enabled": true,
+-            "X": 0.45, "Y": 0, "Z": 0.55,
+-            "Roll": 0, "Pitch": 0, "Yaw" : 0,
+-            "NumberOfLasers": 4,
+-            "PointsPerScan": 4096,
+-            "VerticalFOVUpper": 5,
+-            "VerticalFOVLower": -5,
+-            "HorizontalFOVStart": -90,
+-            "HorizontalFOVEnd": 90,
+-            "RotationsPerSecond": 10,
+-            "DrawDebugPoints": false
+-          },
+-          "Lidar2": {
+-            "SensorType": 6,
+-            "Enabled": true,
+-            "X": 1.20, "Y": 0, "Z": 0.2,
+-            "Roll": 0, "Pitch": 0, "Yaw" : 0,
+-            "NumberOfLasers": 4,
+-            "PointsPerScan": 4096,
+-            "VerticalFOVUpper": 5,
+-            "VerticalFOVLower": -5,
+-            "HorizontalFOVStart": -90,
+-            "HorizontalFOVEnd": 90,
+-            "RotationsPerSecond": 5,
+-            "DrawDebugPoints": false
+-          },
+-          "GSS" : {
+-            "SensorType": 7,
+-            "Enabled": true
+-          }
++        "Gps": {
++          "SensorType": 3,
++          "Enabled": true
+         },
+-        "Cameras": {
+-          "cam1": {
+-            "CaptureSettings": [
++        "GSS": {
++          "SensorType": 7,
++          "Enabled": true
++        },
++        "Lidar": {
++          "SensorType": 6,
++          "Enabled": true,
++          "X": 1.2,
++          "Y": 0,
++          "Z": 0.15,
++          "Roll": 0,
++          "Pitch": 0,
++          "Yaw": 0,
++          "NumberOfLasers": 32,
++          "PointsPerScan": 32768,
++          "VerticalFOVUpper": 5,
++          "VerticalFOVLower": -10,
++          "HorizontalFOVStart": -90,
++          "HorizontalFOVEnd": 90,
++          "RotationsPerSecond": 10,
++          "Range": 40,
++          "DrawDebugPoints": false
++        }
++      },
++      "Cameras": {
++        "cam_left": {
++          "CaptureSettings": [
++            {
++              "ImageType": 0,
++              "Width": 1280,
++              "Height": 960,
++              "FOV_Degrees": 64.5
++            },
+             {
+-                "ImageType": 0,
+-                "Width": 785,
+-                "Height": 785,
+-                "FOV_Degrees": 90
++              "ImageType": 2,
++              "Width": 1280,
++              "Height": 960,
++              "FOV_Degrees": 64.5
+             }
+-            ],
+-            "X": -0.3,
+-            "Y": -0.16,
+-            "Z": 0.8,
+-            "Pitch": 0.0,
+-            "Roll": 0.0,
+-            "Yaw": 0
++          ],
++          "X": -0.3,
++          "Y": 0.16,
++          "Z": 1.0,
++          "Pitch": 0.0,
++          "Roll": 0.0,
++          "Yaw": 0.0
+         },
+-          "cam2": {
+-            "CaptureSettings": [
+-              {
+-                "ImageType": 0,
+-                "Width": 785,
+-                "Height": 785,
+-                "FOV_Degrees": 90
+-              }
+-            ],
+-            "X": -0.3,
+-            "Y": 0.16,
+-            "Z": 0.8,
+-            "Pitch": 0.0,
+-            "Roll": 0.0,
+-            "Yaw": 0.0
+-          }
++        "cam_mono": {
++          "CaptureSettings": [
++            {
++              "ImageType": 0,
++              "Width": 1280,
++              "Height": 960,
++              "FOV_Degrees": 54.5
++            },
++            {
++              "ImageType": 2,
++              "Width": 1280,
++              "Height": 960,
++              "FOV_Degrees": 54.5
++            }
++          ],
++          "X": -0.3,
++          "Y": 0.0,
++          "Z": 1.0,
++          "Pitch": 0.0,
++          "Roll": 0.0,
++          "Yaw": 0.0
+         },
+-        "X": 2, "Y": 0, "Z": 0,
+-        "Pitch": 0, "Roll": 0, "Yaw": 0
+-      }
+-    },
+-    "SubWindows": [
+-    ]
+-  }
++        "cam_right": {
++          "CaptureSettings": [
++            {
++              "ImageType": 0,
++              "Width": 1280,
++              "Height": 960,
++              "FOV_Degrees": 64.5
++            },
++            {
++              "ImageType": 2,
++              "Width": 1280,
++              "Height": 960,
++              "FOV_Degrees": 64.5
++            }
++          ],
++          "X": -0.3,
++          "Y": -0.16,
++          "Z": 1.0,
++          "Pitch": 0.0,
++          "Roll": 0.0,
++          "Yaw": 0.0
++        }
++      },
++      "X": 2,
++      "Y": 0,
++      "Z": 0,
++      "Pitch": 0,
++      "Roll": 0,
++      "Yaw": 0
++    }
++  },
++  "SubWindows": []
++}

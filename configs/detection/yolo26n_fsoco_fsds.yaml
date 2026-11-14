@@ -1,0 +1,12 @@
+# YOLO26n trained on FSOCO (yolo26n_fsoco.pt), fine-tuned on the simulator images, about half an hour.
+# A fixed number of epochs rather than a time budget: with `time` ultralytics re-estimates the epoch count after
+# every epoch from the time left, so the total moves with the GPU load and two runs are not comparable. 25 is what
+# the model in models/detection/ got.
+model: models/detection/yolo26n_fsoco.pt
+data: data/processed/fsds_yolo/fsds.yaml
+imgsz: 1280
+epochs: 25
+close_mosaic: 3
+batch: 16
+workers: 4
+seed: 0

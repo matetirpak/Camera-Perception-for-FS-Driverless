@@ -1,0 +1,8 @@
+# YOLO26s fine-tuned on FSOCO at 1280 px, starting from the COCO weights. Same settings as yolo26n_fsoco.yaml.
+model: models/yolo26/yolo26s.pt
+data: data/processed/fsoco_yolo/fsoco.yaml
+imgsz: 1280
+epochs: 30
+batch: 8
+workers: 4
+seed: 0

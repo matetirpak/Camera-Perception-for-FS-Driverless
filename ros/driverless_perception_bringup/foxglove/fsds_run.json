@@ -1,0 +1,312 @@
+{
+  "configById": {
+    "3D!car": {
+      "cameraState": {
+        "distance": 28,
+        "perspective": true,
+        "phi": 55,
+        "thetaOffset": 180,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-position",
+      "followTf": "fsds/FSCar",
+      "scene": {
+        "transforms": {
+          "showLabel": false,
+          "axisScale": 1
+        }
+      },
+      "transforms": {},
+      "topics": {
+        "/fsds/lidar/Lidar1": {
+          "visible": true,
+          "pointSize": 3,
+          "colorMode": "colormap",
+          "colorField": "x",
+          "colorMap": "turbo"
+        },
+        "/fsds/lidar/Lidar2": {
+          "visible": true,
+          "pointSize": 3,
+          "colorMode": "flat",
+          "flatColor": "#ffffff"
+        },
+        "/ground_truth/cone_markers": {
+          "visible": true
+        },
+        "/fsds/cam1/camera_info": {
+          "visible": true
+        },
+        "/fsds/cam2/camera_info": {
+          "visible": true
+        },
+        "/fsds/lidar/Lidar": {
+          "visible": true,
+          "pointSize": 3,
+          "colorMode": "colormap",
+          "colorField": "x",
+          "colorMap": "turbo"
+        },
+        "/fsds/cam_mono/camera_info": {
+          "visible": true
+        },
+        "/perception/mono/markers": {
+          "visible": true
+        }
+      },
+      "layers": {
+        "grid": {
+          "visible": true,
+          "layerId": "foxglove.Grid",
+          "instanceId": "grid",
+          "label": "Grid",
+          "frameId": "fsds/map",
+          "size": 200,
+          "divisions": 100,
+          "lineWidth": 1,
+          "color": "#248eff40",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {}
+    },
+    "Image!cam1": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/fsds/cam1/image_color/compressed"
+      }
+    },
+    "Image!cam2": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "thetaOffset": 45,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/fsds/cam2/image_color/compressed"
+      }
+    },
+    "Plot!speed": {
+      "title": "Speed",
+      "paths": [
+        {
+          "value": "/fsds/testing_only/odom.twist.twist.linear.x",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "ground truth vx [m/s]"
+        },
+        {
+          "value": "/fsds/gss.twist.twist.linear.x",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "GSS vx [m/s]"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": true,
+      "isSynced": true,
+      "xAxisVal": "timestamp",
+      "sidebarDimension": 240
+    },
+    "Plot!controls": {
+      "title": "Driver commands",
+      "paths": [
+        {
+          "value": "/fsds/control_command.throttle",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "throttle"
+        },
+        {
+          "value": "/fsds/control_command.brake",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "brake"
+        },
+        {
+          "value": "/fsds/control_command.steering",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "label": "steering (+ right)"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": true,
+      "isSynced": true,
+      "xAxisVal": "timestamp",
+      "sidebarDimension": 240
+    },
+    "StateTransitions!race": {
+      "paths": [
+        {
+          "value": "/race/state.data",
+          "timestampMethod": "receiveTime",
+          "label": "race state"
+        },
+        {
+          "value": "/race/lap.data",
+          "timestampMethod": "receiveTime",
+          "label": "laps done"
+        }
+      ],
+      "isSynced": true
+    },
+    "RawMessages!referee": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/fsds/testing_only/extra_info"
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "direction": "row",
+    "first": "3D!car",
+    "second": {
+      "direction": "column",
+      "first": {
+        "direction": "row",
+        "first": "Image!cam1",
+        "second": "Image!cam2",
+        "splitPercentage": 50
+      },
+      "second": {
+        "direction": "column",
+        "first": {
+          "direction": "row",
+          "first": "Plot!speed",
+          "second": "Plot!controls",
+          "splitPercentage": 50
+        },
+        "second": {
+          "direction": "row",
+          "first": "StateTransitions!race",
+          "second": "RawMessages!referee",
+          "splitPercentage": 60
+        },
+        "splitPercentage": 65
+      },
+      "splitPercentage": 45
+    },
+    "splitPercentage": 55
+  }
+}

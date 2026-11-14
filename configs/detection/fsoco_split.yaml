@@ -1,0 +1,29 @@
+# FSOCO split by camera origin (see scripts/split_fsoco.py), written with
+# --val-origins bme --test-origins amz frt --val 0.1 --test 0.1 --seed 0
+#
+# split  origins  images  share   blue  yellow  orange_big  orange_small  unknown
+# train       15    9123  78.9%  68309   76127        5855         22185     5049
+#   val        1    1216  10.5%  10486   10475        1377          1538     1423
+#  test        2    1231  10.6%   7286    6624         983          2268      809
+#   all       18   11570   100%  86081   93226        8215         25991     7281
+train:
+- amz_wide
+- dhen
+- eco
+- ecurieaix
+- eufs
+- ff
+- fsbizkaia
+- gfr
+- ka
+- mms
+- prom
+- pwrrt
+- tuwr
+- ugent
+- ulm
+val:
+- bme
+test:
+- amz
+- frt

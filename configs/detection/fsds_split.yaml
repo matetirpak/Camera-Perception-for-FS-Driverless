@@ -1,0 +1,14 @@
+# Simulator images split by map, used by scripts/prepare_fsds.py.
+# The competition maps come in pairs of lighting: fog (CompetitionMap2, CompetitionMapTestday2), dusk
+# (CompetitionMap3, CompetitionMapTestday3) and day (CompetitionMap1, CompetitionMapTestday1). At least one map of
+# each pair stays in training, so the detector sees every light before it is tested on the dusk map.
+train:
+- TrainingMap
+- CompetitionMap1
+- CompetitionMapTestday1
+- CompetitionMap2
+- CompetitionMapTestday3
+val:
+- CompetitionMapTestday2
+test:
+- CompetitionMap3

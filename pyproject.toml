@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "driverless_perception"
+version = "0.1.0"
+description = "Redundant cone perception (LiDAR, mono, stereo) for Formula Student Driverless, replicating Gosala et al. 2018 in FSDS"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Máté Tirpák" }]
+# ROS 2 Jazzy runs on the system python 3.12 and rclpy only exists there.
+requires-python = ">=3.12,<3.13"
+# Keep numpy below 2, cv_bridge and the other ROS python extensions are built against numpy 1.x.
+dependencies = [
+    "numpy>=1.26,<2",
+    "scipy>=1.11",
+    "pyyaml>=6",
+]
+
+[dependency-groups]
+# ROS registers pytest plugins (launch_testing, ament_*) that only work with pytest 7.
+dev = ["pytest>=7.4,<8", "ruff"]
+# Talking to the simulator over its RPC interface (see src/driverless_perception/sim/fsds_client.py for why this
+# isn't the FSDS python client).
+sim = ["msgpack>=1.0"]
+# Training. torch comes from the CUDA 12.8 index below, older CUDA builds don't support RTX 50 cards.
+train = [
+    "torch>=2.7",
+    "torchvision>=0.22",
+    "ultralytics>=8.4",
+    "matplotlib",
+    "tensorboard>=2.21.0",
+]
+# Writing the results file for Foxglove (scripts/build_results.py).
+viz = [
+    "foxglove-schemas-protobuf>=0.4.0",
+    "mcap>=1.4.0",
+    "mcap-protobuf-support>=0.5.4",
+    "mcap-ros2-support>=0.5.7",
+]
+
+[tool.uv]
+# Use the system python that ROS is built for instead of a uv managed one. The venv is created with
+# --system-site-packages (see the Makefile) so rclpy, cv_bridge, colcon and the message packages are visible.
+python-preference = "only-system"
+default-groups = ["dev", "sim", "train", "viz"]
+# torch depends on setuptools, and setuptools 80 dropped `setup.py develop --editable`,
+# which colcon uses for `--symlink-install` of the python ROS packages.
+constraint-dependencies = ["setuptools<80"]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128" }]
+torchvision = [{ index = "pytorch-cu128" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["build", "install", "log", "third_party"]

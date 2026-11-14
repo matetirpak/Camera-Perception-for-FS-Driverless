@@ -1,0 +1,14 @@
+# YOLO26n fine-tuned on FSOCO at 1280 px, starting from the COCO weights.
+# Everything except model goes to ultralytics' model.train(), see https://docs.ultralytics.com/modes/train/.
+# Paths are relative to the repo root.
+model: models/yolo26/yolo26n.pt
+data: data/processed/fsoco_yolo/fsoco.yaml
+imgsz: 1280
+# 30 epochs: the models level off within a few, what the rest adds comes from the learning rate decaying to
+# the end and the last 10 epochs without mosaic, which a short schedule has as well. 100 would take a day for
+# all three sizes.
+epochs: 30
+# ultralytics accumulates gradients up to 64 images per step, so the batch size only changes memory and speed
+batch: 16
+workers: 4
+seed: 0

@@ -1,0 +1,15 @@
+# Keypoint network on simulator crops, with the schedule of Dhall et al. (2019) but at most half an hour.
+data: data/processed/fsds_keypoints
+epochs: 250
+batch: 128
+lr: 0.0001
+momentum: 0.9
+milestones: [75, 100]
+lr_factor: 0.1
+# weight of the cross ratio term in the loss
+gamma: 0.0001
+time_hours: 0.5
+# half precision on the GPU, about three times faster, fits the whole schedule into the time budget
+amp: true
+workers: 4
+seed: 0
